@@ -1,0 +1,41 @@
+
+# embed_logs.py
+
+import os
+from langchain_community.vectorstores import Chroma
+from langchain_community.document_loaders import TextLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from utils.embeddings import get_openai_embeddings
+from utils.preprocessor import clean_log_text
+from dotenv import load_dotenv
+
+load_dotenv()
+
+def main():
+    # Load and clean the log file
+    log_file_path = "data/sample_log.txt"  # Make sure you have this file ready
+    with open(log_file_path, "r", encoding="utf-8") as file:
+        raw_logs = file.read()
+
+    cleaned_logs = clean_log_text(raw_logs)
+
+    # Split logs into small chunks for better embedding (if large)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+    docs = text_splitter.create_documents([cleaned_logs])
+
+    # Get embeddings
+    embeddings = get_openai_embeddings()
+
+    # Save embeddings into local chroma db
+    db = Chroma.from_documents(
+        documents=docs,
+        embedding=embeddings,
+        persist_directory="./db/chroma"
+    )
+
+    db.persist()
+    print("✅ Logs embedded and saved successfully into ChromaDB!")
+
+if __name__ == "__main__":
+    main()
+
