@@ -4,4 +4,8 @@ langchain-openai
 chromadb
 python-dotenv
 tqdm
+langchain-community
+fastapi
+uvicorn
+psycopg2-binary
 

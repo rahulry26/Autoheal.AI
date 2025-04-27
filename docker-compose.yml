@@ -1,0 +1,31 @@
+
+version: '3.9'
+
+services:
+  autoheal-api:
+    build: .
+    container_name: autoheal-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    depends_on:
+      - chroma-db
+
+  chroma-db:
+    image: ankane/pgvector
+    container_name: chroma-db
+    environment:
+      POSTGRES_USER: chroma
+      POSTGRES_PASSWORD: chroma123
+      POSTGRES_DB: chromadb
+    ports:
+      - "5432:5432"
+    volumes:
+      - chromadb-data:/var/lib/postgresql/data
+
+volumes:
+  chromadb-data:
+
