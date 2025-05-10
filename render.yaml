@@ -1,0 +1,14 @@
+
+services:
+  - type: web
+    name: autoheal-ai
+    env: docker
+    repo: https://github.com/rahulry26/autoheal.ai
+    branch: main
+    plan: free
+    region: oregon
+    dockerContext: .
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /docs
+    autoDeploy: true
+
