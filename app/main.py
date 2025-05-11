@@ -1,3 +1,5 @@
+# app/main.py
+
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
 from utils.search_fix import find_similar_logs_and_suggest_fix
@@ -22,7 +24,7 @@ async def analyze_log(request: LogRequest):
         }
     except Exception as e:
         print("⚠️ Exception occurred:", e)
-        traceback.print_exc()  # shows full stack trace
+        traceback.print_exc()
         return {
             "error": str(e),
             "details": traceback.format_exc()

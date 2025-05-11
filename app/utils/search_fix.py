@@ -38,3 +38,4 @@ def search_fixes(new_log_text):
 
     return similar_logs, response.content
 
+
