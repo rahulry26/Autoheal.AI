@@ -1,10 +1,8 @@
-
-# utils/search_fix.py
+# app/utils/search_fix.py
 
 from langchain_community.vectorstores import Chroma
-from langchain_openai import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain.prompts import PromptTemplate
-from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
 import os
 
@@ -14,9 +12,8 @@ persist_directory = './db'
 embedding = OpenAIEmbeddings()
 vectordb = Chroma(persist_directory=persist_directory, embedding_function=embedding)
 
-def find_similar_logs_and_suggest_fix(new_log_text):
+def search_fixes(new_log_text):
     similar_docs = vectordb.similarity_search(new_log_text, k=2)
-
     similar_logs = [doc.page_content for doc in similar_docs]
 
     prompt_template = """
@@ -29,17 +26,15 @@ def find_similar_logs_and_suggest_fix(new_log_text):
     {current_log}
 
     Suggest the most probable root cause and a smart fix.
-
     """
 
-    filled_prompt = PromptTemplate(
+    prompt = PromptTemplate(
         input_variables=["logs", "current_log"],
         template=prompt_template
     ).format(logs="\n\n".join(similar_logs), current_log=new_log_text)
 
     llm = ChatOpenAI(model_name="gpt-3.5-turbo")
-
-    response = llm.invoke(filled_prompt)
+    response = llm.invoke(prompt)
 
     return similar_logs, response.content
 
