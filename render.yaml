@@ -2,13 +2,11 @@
 services:
   - type: web
     name: autoheal-ai
-    env: docker
-    repo: https://github.com/rahulry26/autoheal.ai
-    branch: main
+    env: python
     plan: free
-    region: oregon
-    dockerContext: .
-    dockerfilePath: ./Dockerfile
-    healthCheckPath: /docs
-    autoDeploy: true
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "./start.sh"
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
 
