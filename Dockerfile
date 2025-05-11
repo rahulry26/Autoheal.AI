@@ -1,21 +1,24 @@
 
-# Dockerfile for AutoHeal.AI
+FROM python:3.10-slim
 
-# Base Image
-FROM python:3.11-slim
-
-# Set working directory inside container
+# Set working directory
 WORKDIR /app
 
-# Copy all files
-COPY . .
+# Copy dependencies
+COPY requirements.txt .
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose the port FastAPI will run on
-EXPOSE 8000
+# Copy the rest of the code
+COPY . .
 
-# Start FastAPI app using uvicorn
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Set environment variable for the port
+ENV PORT=10000
+
+# Expose the port Render expects
+EXPOSE $PORT
+
+# Start the app with the correct port from the environment
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT}"]
 
