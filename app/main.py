@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from utils.search_fix import find_best_fix
+from app.utils.search_fix import find_best_fix
 
 app = FastAPI()
 
