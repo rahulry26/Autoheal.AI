@@ -1,12 +1,7 @@
-openai
-langchain
-langchain-openai
-chromadb
-langchain==0.2.langchain==0.2.99
-python-dotenv
-tqdm
-langchain-community
-fastapi
-uvicorn
-psycopg2-binary
+fastapi==0.110.0
+uvicorn==0.27.1
+langchain==0.2.9
+openai==1.24.1
+chromadb==0.4.24
+tiktoken==0.6.0
 
