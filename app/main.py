@@ -1,15 +1,14 @@
 from fastapi import FastAPI
-from app.utils.search_fix import find_similar_logs_and_suggest_fix
-from app.models.input_model import LogInput
+from pydantic import BaseModel
+from utils.search_fix import find_best_fix
 
 app = FastAPI()
 
-@app.get("/")
-def read_root():
-    return {"message": "AutoHeal.AI is live!"}
-@app.post("/analyze")
-def suggest_fix(log_input: LogInput):
-    result = find_similar_logs_and_suggest_fix(log_input.log)
-      return {"suggested_fix": result}
+class LogInput(BaseModel):
+    log_text: str
 
+@app.post("/suggest_fix")
+async def suggest_fix(log: LogInput):
+    result = find_best_fix(log.log_text)
+    return {"suggested_fix": result}
 
